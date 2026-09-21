@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Pendaftaran Yayasan Mardiah</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body style="background-color: #f1f5f9;">
+
+  <!-- ========================================================================
+       1. TAMPILAN LOGIN ADMIN
+       ======================================================================== -->
+  <div id="adminLoginView" class="admin-login-container">
+    <div class="admin-login-card">
+      <div class="login-header">
+        <div class="logo-icon">YM</div>
+        <h2>Admin Panel</h2>
+        <p>Yayasan Mardiah</p>
+      </div>
+
+      <div id="loginAlert" class="alert-box alert-danger" style="display: none; margin-bottom: 1.25rem;">
+        Username atau password salah.
+      </div>
+
+      <form id="adminLoginForm">
+        <div class="form-group" style="text-align: left; margin-bottom: 1.25rem;">
+          <label for="loginUsername" class="form-label">Username</label>
+          <input type="text" id="loginUsername" name="username" class="form-control" placeholder="Masukkan username"
+            required autocomplete="username">
+        </div>
+
+        <div class="form-group" style="text-align: left; margin-bottom: 1.75rem;">
+          <label for="loginPassword" class="form-label">Password</label>
+          <input type="password" id="loginPassword" name="password" class="form-control" placeholder="Masukkan password"
+            required autocomplete="current-password">
+        </div>
+
+        <button type="submit" id="loginBtn" class="btn-submit" style="width: 100%;">
+          Masuk ke Dashboard
+        </button>
+      </form>
+
+      <div style="margin-top: 1.75rem; font-size: 0.85rem;">
+        <a href="index.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">
+          ← Kembali ke Halaman Utama Pendaftaran
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       2. TAMPILAN DASHBOARD ADMIN (Saat Terotentikasi)
+       ======================================================================== -->
+  <div id="adminDashboardView" class="admin-dashboard-container" style="display: none;">
+    <div class="container">
+
+      <!-- Top Admin Header -->
+      <div class="admin-header-bar">
+        <div class="admin-user-info">
+          <div class="admin-avatar">A</div>
+          <div class="admin-name-title">
+            <h3 id="adminProfileName">Administrator</h3>
+            <span>Pengelola Yayasan Mardiah</span>
+          </div>
+        </div>
+
+        <div class="admin-actions">
+          <button type="button" id="btnAddCandidate" class="btn-admin-nav btn-admin-primary">
+            + Tambah Manual
+          </button>
+          <button type="button" id="btnExportCsv" class="btn-admin-nav btn-admin-gold">
+            📥 Export CSV
+          </button>
+          <button type="button" id="btnChangePassword" class="btn-admin-nav btn-admin-outline"
+            title="Ganti Password Administrator">
+            🔑 Ganti Password
+          </button>
+          <a href="index.html" target="_blank" class="btn-admin-nav btn-admin-outline">
+            🌐 Web Publik
+          </a>
+          <button type="button" id="logoutBtn" class="btn-admin-nav btn-admin-danger">
+            🚪 Keluar
+          </button>
+        </div>
+      </div>
+
+      <!-- Metric Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card" style="border-left: 4px solid var(--primary);">
+          <div class="stat-info">
+            <span>Total Pendaftar</span>
+            <h4 id="statTotal">0</h4>
+          </div>
+          <div class="stat-badge-icon" style="background: var(--primary-surface); color: var(--primary);">
+            👥
+          </div>
+        </div>
+
+        <div class="stat-card" style="border-left: 4px solid #f59e0b;">
+          <div class="stat-info">
+            <span>Menunggu Review</span>
+            <h4 id="statReview">0</h4>
+          </div>
+          <div class="stat-badge-icon" style="background: #fef3c7; color: #d97706;">
+            ⏳
+          </div>
+        </div>
+
+        <div class="stat-card" style="border-left: 4px solid #0284c7;">
+          <div class="stat-info">
+            <span>Lolos Berkas</span>
+            <h4 id="statLolos">0</h4>
+          </div>
+          <div class="stat-badge-icon" style="background: #e0f2fe; color: #0284c7;">
+            📋
+          </div>
+        </div>
+
+        <div class="stat-card" style="border-left: 4px solid #7c3aed;">
+          <div class="stat-info">
+            <span>Tahap Wawancara</span>
+            <h4 id="statWawancara">0</h4>
+          </div>
+          <div class="stat-badge-icon" style="background: #ede9fe; color: #7c3aed;">
+            🎙️
+          </div>
+        </div>
+
+        <div class="stat-card" style="border-left: 4px solid #16a34a;">
+          <div class="stat-info">
+            <span>Diterima</span>
+            <h4 id="statDiterima">0</h4>
+          </div>
+          <div class="stat-badge-icon" style="background: #dcfce7; color: #16a34a;">
+            🌟
+          </div>
+        </div>
+      </div>
+
+      <!-- Toolbar & Filters -->
+      <div class="toolbar-card">
+        <div class="search-input-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="tableSearchInput" class="form-control"
+            placeholder="Cari nama lengkap, NIK, no. WhatsApp, atau email...">
+        </div>
+
+        <select id="filterDivisi" class="form-control filter-select">
+          <option value="">-- Semua Divisi --</option>
+          <option value="Keagamaan & Dakwah">Keagamaan & Dakwah</option>
+          <option value="Sosial & Kemanusiaan">Sosial & Kemanusiaan</option>
+          <option value="Pendidikan & Pembinaan">Pendidikan & Pembinaan</option>
+          <option value="Media, Humas & Syiar Digital">Media & Humas</option>
+          <option value="Umum, Logistik & Perlengkapan">Umum & Logistik</option>
+        </select>
+
+        <select id="filterStatus" class="form-control filter-select">
+          <option value="">-- Semua Status --</option>
+          <option value="Menunggu Review">Menunggu Review</option>
+          <option value="Lolos Berkas">Lolos Berkas</option>
+          <option value="Wawancara">Wawancara</option>
+          <option value="Diterima">Diterima</option>
+          <option value="Ditolak">Ditolak</option>
+        </select>
+
+        <button type="button" id="resetFilterBtn" class="btn-admin-nav btn-admin-outline">
+          Reset Filter
+        </button>
+      </div>
+
+      <!-- Table Card -->
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="crud-table">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Calon Pengurus & NIK</th>
+                <th>Divisi Pilihan</th>
+                <th>Kontak (WA / Email)</th>
+                <th>Pendidikan</th>
+                <th>Tgl Daftar</th>
+                <th>Status Seleksi</th>
+                <th style="text-align: center;">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="candidatesTableBody">
+              <!-- Baris data diisi oleh admin.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Table Footer / Pagination -->
+        <div class="table-footer">
+          <div id="paginationInfo" style="font-size: 0.85rem; color: var(--text-muted);">
+            Memuat data...
+          </div>
+          <div class="pagination-controls">
+            <button type="button" id="paginationPrev" class="btn-page" disabled>Sebelumnya</button>
+            <button type="button" id="paginationNext" class="btn-page" disabled>Selanjutnya</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       3. MODAL: DETAIL LENGKAP PENDAFTAR
+       ======================================================================== -->
+  <div id="detailModal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-content modal-dialog-large">
+      <div class="modal-header-large">
+        <h3 style="color: var(--primary); font-size: 1.3rem;">Detail Berkas Calon Pengurus</h3>
+        <button type="button" class="btn-close-x">&times;</button>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-item">
+          <div class="detail-label">Nama Lengkap</div>
+          <div class="detail-val" id="detailNama">-</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">NIK / No. KTP</div>
+          <div class="detail-val" id="detailNik" style="font-family: monospace;">-</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Jenis Kelamin</div>
+          <div class="detail-val" id="detailGender">-</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Tempat, Tgl Lahir</div>
+          <div class="detail-val" id="detailTtl">-</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">No. WhatsApp</div>
+          <div class="detail-val" id="detailWa">-</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Alamat Email</div>
+          <div class="detail-val" id="detailEmail">-</div>
+        </div>
+        <div class="detail-item full">
+          <div class="detail-label">Alamat Lengkap / Domisili</div>
+          <div class="detail-val" id="detailAlamat">-</div>
+        </div>
+        <div class="detail-item full" id="detailKtpContainer">
+          <div class="detail-label">Foto / Dokumen KTP</div>
+          <div class="detail-val" id="detailKtpVal" style="margin-top: 0.35rem;">-</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Pendidikan Terakhir</div>
+          <div class="detail-val" id="detailPendidikan">-</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Divisi yang Diminati</div>
+          <div class="detail-val" id="detailPosisi" style="color: var(--primary); font-weight:700;">-</div>
+        </div>
+        <div class="detail-item full">
+          <div class="detail-label">Motivasi Bergabung</div>
+          <div class="detail-quote" id="detailMotivasi">-</div>
+        </div>
+        <div class="detail-item full">
+          <div class="detail-label">Riwayat Organisasi</div>
+          <div class="detail-val" id="detailOrganisasi" style="white-space: pre-wrap; font-weight: normal;">-</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Waktu Pendaftaran</div>
+          <div class="detail-val" id="detailCreated" style="font-size: 0.85rem;">-</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">UUID Registrasi</div>
+          <div class="detail-val" id="detailRegId" style="font-family: monospace; font-size: 0.8rem;">-</div>
+        </div>
+      </div>
+
+      <!-- Quick Change Status Seleksi -->
+      <div
+        style="background: var(--primary-surface); padding: 1rem; border-radius: 8px; border: 1px solid var(--primary-border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
+        <div>
+          <strong style="color: var(--primary); font-size: 0.9rem;">Ubah Status Seleksi:</strong>
+          <span style="font-size: 0.8rem; color: var(--text-muted); display: block;">Perubahan otomatis tersimpan
+            seketika.</span>
+        </div>
+        <select id="detailStatusSelect" class="form-control" style="width: auto; font-weight: 700;">
+          <option value="Menunggu Review">Menunggu Review</option>
+          <option value="Lolos Berkas">Lolos Berkas</option>
+          <option value="Wawancara">Wawancara</option>
+          <option value="Diterima">Diterima</option>
+          <option value="Ditolak">Ditolak</option>
+        </select>
+      </div>
+
+      <div style="margin-top: 1.5rem; text-align: right;">
+        <button type="button" class="btn-admin-nav btn-admin-outline btn-close-modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       4. MODAL: EDIT DATA PENDAFTAR
+       ======================================================================== -->
+  <div id="editModal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-content modal-dialog-large">
+      <div class="modal-header-large">
+        <h3 style="color: var(--primary); font-size: 1.3rem;">Edit Data Pendaftar</h3>
+        <button type="button" class="btn-close-x">&times;</button>
+      </div>
+
+      <form id="editCandidateForm">
+        <input type="hidden" name="edit_id" id="edit_id">
+
+        <div class="form-grid">
+          <div class="form-group col-full">
+            <label class="form-label">Nama Lengkap</label>
+            <input type="text" name="nama_lengkap" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">NIK (16 Digit)</label>
+            <input type="text" name="nik" class="form-control" maxlength="16" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Jenis Kelamin</label>
+            <select name="jenis_kelamin" class="form-control" required>
+              <option value="Laki-laki">Laki-laki</option>
+              <option value="Perempuan">Perempuan</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Tempat Lahir</label>
+            <input type="text" name="tempat_lahir" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Tanggal Lahir</label>
+            <input type="date" name="tanggal_lahir" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Nomor WhatsApp</label>
+            <input type="tel" name="whatsapp" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" required>
+          </div>
+
+          <div class="form-group col-full">
+            <label class="form-label">Alamat Lengkap</label>
+            <textarea name="alamat" class="form-control" rows="2"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Pendidikan Terakhir</label>
+            <select name="pendidikan_terakhir" class="form-control" required>
+              <option value="SMA/SMK">SMA/SMK</option>
+              <option value="D3">D3</option>
+              <option value="S1">S1</option>
+              <option value="S2">S2</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Posisi / Divisi</label>
+            <select name="posisi_diminati" class="form-control" required>
+              <option value="Keagamaan & Dakwah">Keagamaan & Dakwah</option>
+              <option value="Sosial & Kemanusiaan">Sosial & Kemanusiaan</option>
+              <option value="Pendidikan & Pembinaan">Pendidikan & Pembinaan</option>
+              <option value="Media, Humas & Syiar Digital">Media, Humas & Syiar Digital</option>
+              <option value="Umum, Logistik & Perlengkapan">Umum, Logistik & Perlengkapan</option>
+            </select>
+          </div>
+
+          <div class="form-group col-full">
+            <label class="form-label">Status Seleksi</label>
+            <select name="status_seleksi" class="form-control" style="font-weight: 700;" required>
+              <option value="Menunggu Review">Menunggu Review</option>
+              <option value="Lolos Berkas">Lolos Berkas</option>
+              <option value="Wawancara">Wawancara</option>
+              <option value="Diterima">Diterima</option>
+              <option value="Ditolak">Ditolak</option>
+            </select>
+          </div>
+
+          <div class="form-group col-full">
+            <label class="form-label">Motivasi</label>
+            <textarea name="motivasi" class="form-control" rows="3" required></textarea>
+          </div>
+
+          <div class="form-group col-full">
+            <label class="form-label">Riwayat Organisasi</label>
+            <textarea name="riwayat_organisasi" class="form-control" rows="2"></textarea>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+          <button type="button" class="btn-admin-nav btn-admin-outline btn-cancel-modal">Batal</button>
+          <button type="submit" class="btn-admin-nav btn-admin-primary">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       5. MODAL: TAMBAH PENDAFTAR MANUAL
+       ======================================================================== -->
+  <div id="addModal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-content modal-dialog-large">
+      <div class="modal-header-large">
+        <h3 style="color: var(--primary); font-size: 1.3rem;">Tambah Calon Pengurus Manual</h3>
+        <button type="button" class="btn-close-x">&times;</button>
+      </div>
+
+      <form id="addCandidateForm">
+        <div class="form-grid">
+          <div class="form-group col-full">
+            <label class="form-label">Nama Lengkap <span class="required-star">*</span></label>
+            <input type="text" name="nama_lengkap" class="form-control" placeholder="Nama lengkap" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">NIK (16 Digit) <span class="required-star">*</span></label>
+            <input type="text" name="nik" class="form-control" maxlength="16" placeholder="32xxxxxxxxxxxxxx" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Jenis Kelamin <span class="required-star">*</span></label>
+            <select name="jenis_kelamin" class="form-control" required>
+              <option value="Laki-laki">Laki-laki</option>
+              <option value="Perempuan">Perempuan</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Tempat Lahir</label>
+            <input type="text" name="tempat_lahir" class="form-control" placeholder="Kota lahir">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Tanggal Lahir</label>
+            <input type="date" name="tanggal_lahir" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Nomor WhatsApp <span class="required-star">*</span></label>
+            <input type="tel" name="whatsapp" class="form-control" placeholder="08xxxxxxxxxx" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email <span class="required-star">*</span></label>
+            <input type="email" name="email" class="form-control" placeholder="email@domain.com" required>
+          </div>
+
+          <div class="form-group col-full">
+            <label class="form-label">Alamat Lengkap</label>
+            <textarea name="alamat" class="form-control" rows="2" placeholder="Domisili saat ini"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Pendidikan Terakhir <span class="required-star">*</span></label>
+            <select name="pendidikan_terakhir" class="form-control" required>
+              <option value="SMA/SMK">SMA/SMK</option>
+              <option value="D3">D3</option>
+              <option value="S1" selected>S1</option>
+              <option value="S2">S2</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Divisi Diminati <span class="required-star">*</span></label>
+            <select name="posisi_diminati" class="form-control" required>
+              <option value="Keagamaan & Dakwah">Keagamaan & Dakwah</option>
+              <option value="Sosial & Kemanusiaan">Sosial & Kemanusiaan</option>
+              <option value="Pendidikan & Pembinaan">Pendidikan & Pembinaan</option>
+              <option value="Media, Humas & Syiar Digital">Media, Humas & Syiar Digital</option>
+              <option value="Umum, Logistik & Perlengkapan">Umum, Logistik & Perlengkapan</option>
+            </select>
+          </div>
+
+          <div class="form-group col-full">
+            <label class="form-label">Status Seleksi Awal</label>
+            <select name="status_seleksi" class="form-control" style="font-weight: 700;">
+              <option value="Menunggu Review">Menunggu Review</option>
+              <option value="Lolos Berkas">Lolos Berkas</option>
+              <option value="Wawancara">Wawancara</option>
+              <option value="Diterima">Diterima</option>
+            </select>
+          </div>
+
+          <div class="form-group col-full">
+            <label class="form-label">Motivasi</label>
+            <textarea name="motivasi" class="form-control" rows="3" placeholder="Alasan pendaftaran..."></textarea>
+          </div>
+
+          <div class="form-group col-full">
+            <label class="form-label">Riwayat Organisasi</label>
+            <textarea name="riwayat_organisasi" class="form-control" rows="2"
+              placeholder="Pengalaman organisasi..."></textarea>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+          <button type="button" class="btn-admin-nav btn-admin-outline btn-cancel-modal">Batal</button>
+          <button type="submit" class="btn-admin-nav btn-admin-primary">+ Simpan Pendaftar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       6. MODAL: KONFIRMASI HAPUS
+       ======================================================================== -->
+  <div id="deleteModal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-content" style="max-width: 440px;">
+      <div
+        style="width: 56px; height: 56px; border-radius: 50%; background: var(--danger-bg); color: var(--danger); display: inline-flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 1rem;">
+        ⚠️
+      </div>
+      <h3 style="color: var(--danger); font-size: 1.3rem; margin-bottom: 0.5rem;">Hapus Data Pendaftar?</h3>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">
+        Apakah Anda yakin ingin menghapus data calon pengurus atas nama <strong id="deleteCandidateName">-</strong>?
+        Tindakan ini tidak dapat dibatalkan.
+      </p>
+
+      <div style="display: flex; gap: 0.75rem; justify-content: center;">
+        <button type="button" class="btn-admin-nav btn-admin-outline btn-cancel-modal" style="flex: 1;">
+          Batal
+        </button>
+        <button type="button" id="confirmDeleteBtn" class="btn-admin-nav btn-admin-danger" style="flex: 1;">
+          Ya, Hapus Data
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       7. MODAL: GANTI PASSWORD ADMIN
+       ======================================================================== -->
+  <div id="passwordModal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-content" style="max-width: 480px; text-align: left;">
+      <div class="modal-header-large">
+        <h3 style="color: var(--primary); font-size: 1.25rem;">🔑 Ganti Password Administrator</h3>
+        <button type="button" class="btn-close-x">&times;</button>
+      </div>
+
+      <div id="passwordAlert" class="alert-box" style="display: none; margin-bottom: 1.25rem;"></div>
+
+      <form id="changePasswordForm">
+        <div class="form-group" style="margin-bottom: 1.15rem;">
+          <label class="form-label" for="oldPasswordInput">Password Lama Saat Ini <span
+              class="required-star">*</span></label>
+          <input type="password" name="old_password" id="oldPasswordInput" class="form-control"
+            placeholder="Masukkan password saat ini (default: admin123)" required>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.15rem;">
+          <label class="form-label" for="newPasswordInput">Password Baru <span class="required-star">*</span></label>
+          <input type="password" name="new_password" id="newPasswordInput" class="form-control"
+            placeholder="Minimal 6 karakter" minlength="6" required>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <label class="form-label" for="confirmPasswordInput">Konfirmasi Password Baru <span
+              class="required-star">*</span></label>
+          <input type="password" name="confirm_password" id="confirmPasswordInput" class="form-control"
+            placeholder="Ketik ulang password baru Anda" minlength="6" required>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+          <button type="button" class="btn-admin-nav btn-admin-outline btn-cancel-modal">Batal</button>
+          <button type="submit" id="savePasswordBtn" class="btn-admin-nav btn-admin-primary">
+            Simpan Password Baru
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main Admin Script -->
+  <script src="js/admin.js"></script>
+</body>
+
+</html>
