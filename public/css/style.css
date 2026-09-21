@@ -119,6 +119,23 @@ body {
   border: 2px solid var(--gold-border);
 }
 
+.logo-img {
+  height: 46px;
+  width: auto;
+  max-width: 52px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 2px;
+  box-shadow: 0 2px 8px rgba(13, 92, 70, 0.15);
+  border: 1.5px solid var(--gold-border);
+  transition: transform var(--transition-fast);
+}
+
+.brand-logo:hover .logo-img {
+  transform: scale(1.05);
+}
+
 .brand-text h1 {
   font-size: 1.2rem;
   font-weight: 700;
@@ -945,6 +962,15 @@ body {
   margin: 0 auto 1rem;
 }
 
+.login-header .admin-login-logo {
+  max-height: 85px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  margin: 0 auto 1.25rem;
+  display: block;
+}
+
 .login-header h2 {
   color: var(--primary);
   font-size: 1.5rem;
@@ -979,6 +1005,17 @@ body {
   display: flex;
   align-items: center;
   gap: 0.85rem;
+}
+
+.admin-header-logo {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 2px;
+  border: 2px solid var(--gold-border);
+  box-shadow: var(--shadow-sm);
 }
 
 .admin-avatar {
