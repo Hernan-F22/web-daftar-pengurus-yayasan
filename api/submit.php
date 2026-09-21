@@ -222,19 +222,35 @@ if (isset($_FILES['file_ktp']) && $_FILES['file_ktp']['error'] !== UPLOAD_ERR_NO
                 $errors['file_ktp'] = 'Tipe konten file tidak valid (' . htmlspecialchars($mimeType) . '). Harap unggah foto KTP asli atau dokumen PDF.';
             } else {
                 $uploadDir = dirname(__DIR__) . '/public/uploads/ktp';
-                if (!is_dir($uploadDir)) {
+                $canWriteDisk = is_dir($uploadDir) && is_writable($uploadDir);
+                if (!$canWriteDisk) {
                     @mkdir($uploadDir, 0755, true);
+                    $canWriteDisk = is_dir($uploadDir) && is_writable($uploadDir);
                 }
 
-                $cleanNik = preg_replace('/[^0-9]/', '', $nik);
-                $uniqueHash = bin2hex(random_bytes(6));
-                $safeFilename = sprintf('ktp_%s_%s.%s', $cleanNik ?: 'doc', $uniqueHash, $ext);
-                $destination = $uploadDir . '/' . $safeFilename;
+                // Coba simpan ke file lokal jika direktori dapat ditulis (misal di XAMPP)
+                if ($canWriteDisk) {
+                    $cleanNik = preg_replace('/[^0-9]/', '', $nik);
+                    $uniqueHash = bin2hex(random_bytes(6));
+                    $safeFilename = sprintf('ktp_%s_%s.%s', $cleanNik ?: 'doc', $uniqueHash, $ext);
+                    $destination = $uploadDir . '/' . $safeFilename;
 
-                if (move_uploaded_file($file['tmp_name'], $destination)) {
-                    $ktpRelativePath = 'uploads/ktp/' . $safeFilename;
-                } else {
-                    $errors['file_ktp'] = 'Gagal menyimpan berkas KTP di server. Pastikan izin folder uploads aktif.';
+                    if (@move_uploaded_file($file['tmp_name'], $destination)) {
+                        $ktpRelativePath = 'uploads/ktp/' . $safeFilename;
+                    }
+                }
+
+                // Jika di lingkungan Serverless (Vercel) dengan filesystem read-only:
+                // Simpan berkas sebagai Data URI Base64 terenkapsulasi langsung ke database
+                if ($ktpRelativePath === null) {
+                    $fileData = @file_get_contents($file['tmp_name']);
+                    if ($fileData !== false) {
+                        $base64 = base64_encode($fileData);
+                        $finalMime = $mimeType ?: ($ext === 'pdf' ? 'application/pdf' : 'image/' . ($ext === 'jpg' ? 'jpeg' : $ext));
+                        $ktpRelativePath = sprintf('data:%s;base64,%s', $finalMime, $base64);
+                    } else {
+                        $errors['file_ktp'] = 'Gagal memproses berkas KTP. Silakan periksa berkas Anda dan coba kembali.';
+                    }
                 }
             }
         }
@@ -255,6 +271,18 @@ if (!empty($errors)) {
 // 4. Proses Simpan ke TiDB Cloud Serverless
 try {
     $pdo = getDbConnection();
+
+    // Pastikan skema tabel mendukung kolom file_ktp berukuran MEDIUMTEXT
+    try {
+        $cols = $pdo->query("SHOW COLUMNS FROM `pendaftar` LIKE 'file_ktp'")->fetchAll();
+        if (empty($cols)) {
+            $pdo->exec("ALTER TABLE `pendaftar` ADD COLUMN `file_ktp` MEDIUMTEXT NULL AFTER `alamat`");
+        } else {
+            $pdo->exec("ALTER TABLE `pendaftar` MODIFY COLUMN `file_ktp` MEDIUMTEXT NULL");
+        }
+    } catch (Throwable $eIgnore) {
+        // Abaikan jika sudah sesuai
+    }
 
     // Periksa apakah NIK atau Email sudah terdaftar sebelumnya
     $checkSql = "SELECT id, nik, email FROM `pendaftar` WHERE `nik` = :nik OR `email` = :email LIMIT 1";

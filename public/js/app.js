@@ -354,7 +354,15 @@ document.addEventListener('DOMContentLoaded', () => {
         body: formData
       });
 
-      const result = await response.json();
+      let result;
+      const rawText = await response.text();
+      try {
+        result = JSON.parse(rawText);
+      } catch (jsonErr) {
+        console.error('[Response parse error]:', rawText);
+        showAlert('Terjadi kendala saat membaca respon dari server. Silakan coba kembali.', 'danger');
+        return;
+      }
 
       if (response.ok && result.status === 'success') {
         // Tampilkan Modal Sukses
@@ -396,7 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (networkError) {
       console.error('[Fetch Error]:', networkError);
       showAlert(
-        'Gagal terhubung ke server pendaftaran. Pastikan web server Apache & MySQL aktif di XAMPP.',
+        'Gagal terhubung ke server pendaftaran. Pastikan koneksi internet Anda stabil atau silakan coba beberapa saat lagi.',
         'danger'
       );
     } finally {

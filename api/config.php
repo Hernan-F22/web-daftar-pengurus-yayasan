@@ -7,6 +7,11 @@
 
 declare(strict_types=1);
 
+// Mulai output buffering untuk mencegah peringatan server merusak JSON
+if (!ob_get_level()) {
+    ob_start();
+}
+
 // Cegah caching header pada respon API
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: DENY');
@@ -166,6 +171,9 @@ function getDbConnection(): PDO
  */
 function sendJsonResponse(int $statusCode, array $data): void
 {
+    if (ob_get_length()) {
+        ob_clean();
+    }
     http_response_code($statusCode);
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);

@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `pendaftar` (
     `whatsapp` VARCHAR(25) NOT NULL COMMENT 'Nomor WhatsApp aktif untuk komunikasi tim',
     `email` VARCHAR(150) NOT NULL UNIQUE COMMENT 'Alamat surel aktif calon pengurus',
     `alamat` TEXT NULL COMMENT 'Alamat tempat tinggal / domisili saat ini',
-    `file_ktp` VARCHAR(255) NULL COMMENT 'Path berkas foto/scan KTP pendaftar',
+    `file_ktp` MEDIUMTEXT NULL COMMENT 'Path berkas atau Data URI foto/scan KTP pendaftar',
     `pendidikan_terakhir` VARCHAR(50) NOT NULL COMMENT 'Jenjang pendidikan terakhir (SMA/SMK, D3, S1, S2, Lainnya)',
     `posisi_diminati` VARCHAR(100) NOT NULL COMMENT 'Divisi kepengurusan yang dipilih',
     `motivasi` TEXT NOT NULL COMMENT 'Uraian motivasi bergabung dengan kepengurusan',
