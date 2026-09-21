@@ -359,6 +359,303 @@ body {
   margin-bottom: 0.4rem;
 }
 
+/* ==========================================================================
+   Profil Resmi Yayasan Mardiah Components
+   ========================================================================== */
+.narasi-box {
+  background: linear-gradient(135deg, rgba(13, 92, 70, 0.04) 0%, rgba(180, 131, 62, 0.08) 100%);
+  border: 1.5px solid var(--primary-border);
+  border-left: 6px solid var(--primary);
+  border-radius: 16px;
+  padding: 2.25rem;
+  margin: 2.5rem 0 3.5rem;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+.narasi-box blockquote {
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.8;
+  color: #1e293b;
+  font-style: italic;
+  margin-bottom: 1.25rem;
+  position: relative;
+}
+
+.narasi-author {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  font-weight: 800;
+  color: var(--primary);
+  font-size: 0.95rem;
+  flex-wrap: wrap;
+}
+
+.narasi-author span {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.meta-pills {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  justify-content: center;
+}
+
+.meta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 0.45rem 1.15rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.meta-pill.gold {
+  border-color: var(--gold-border);
+  color: #855b1f;
+  background: var(--gold-light);
+}
+
+.profile-block {
+  margin-bottom: 3.5rem;
+}
+
+.profile-block-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.profile-block-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.profile-block-subtitle {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* Tagline Cards */
+.tagline-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.tagline-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.75rem;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.tagline-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--gold) 100%);
+}
+
+.tagline-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-border);
+}
+
+.tagline-icon {
+  font-size: 2.2rem;
+  margin-bottom: 0.75rem;
+  display: inline-block;
+}
+
+.tagline-card h4 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.tagline-card p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Pilar Program Grid */
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.35rem;
+}
+
+.pillar-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 1.75rem;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-normal);
+  border-top: 4px solid var(--primary);
+  display: flex;
+  flex-direction: column;
+}
+
+.pillar-card:hover {
+  border-top-color: var(--gold);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.pillar-tag {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--primary);
+  background: var(--primary-surface);
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+  display: inline-block;
+  align-self: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.pillar-card h4 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 0.4rem;
+}
+
+.pillar-card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* Sasaran Chips */
+.target-chips {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 1.25rem;
+}
+
+.target-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg-card);
+  color: var(--primary);
+  border: 1.5px solid var(--primary-border);
+  padding: 0.5rem 1.25rem;
+  border-radius: 9999px;
+  font-size: 0.925rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Nilai-Nilai Cards */
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 1.15rem;
+}
+
+.value-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 1.5rem 1.15rem;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-fast);
+}
+
+.value-card:hover {
+  border-color: var(--gold);
+  background: var(--gold-light);
+  transform: translateY(-2px);
+}
+
+.value-card .value-emoji {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.value-card h5 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 0.35rem;
+}
+
+.value-card p {
+  font-size: 0.825rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+/* Arah Masa Depan */
+.future-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  padding: 0;
+}
+
+.future-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: var(--bg-card);
+  padding: 1.1rem 1.25rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  font-size: 0.95rem;
+  color: var(--text-main);
+  box-shadow: var(--shadow-sm);
+  line-height: 1.5;
+}
+
+.future-item-icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--primary-surface);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
 /* Divisi Section */
 .divisions-section {
   padding: 2.5rem 0 4rem;
@@ -1447,4 +1744,34 @@ body {
 
 .btn-close-x:hover {
   color: var(--danger);
+}
+
+/* ==========================================================================
+   Responsive Media Queries
+   ========================================================================== */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 1.85rem;
+  }
+
+  .hero-desc {
+    font-size: 1rem;
+  }
+
+  .narasi-box {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .narasi-box blockquote {
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  .profile-block-title {
+    font-size: 1.35rem;
+  }
+
+  .section-title {
+    font-size: 1.6rem;
+  }
 }

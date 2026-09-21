@@ -173,6 +173,13 @@ if (!in_array($pendidikanTerakhir, $validEducation, true)) {
 
 // Posisi / Divisi
 $validDivisions = [
+    'Pendidikan & Pengembangan (Mardiah Edu)',
+    'Sosial & Kemanusiaan (Mardiah Care)',
+    'Pemberdayaan Masyarakat (Mardiah Empower)',
+    'Inklusif & Kebutuhan Khusus (Mardiah Inclusive)',
+    'Media, Humas & Teknologi Digital',
+    'Umum, Logistik & Kesekretariatan',
+    // Backward compatibility
     'Keagamaan & Dakwah',
     'Sosial & Kemanusiaan',
     'Pendidikan & Pembinaan',
